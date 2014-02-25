@@ -58,6 +58,7 @@ $(document).ready(function() {
 
     var inputtedFirstName = $('input#new-first-name').val();
     var inputtedLastName = $('input#new-last-name').val();
+    var isValidPhone = [];
 
     var newContact = Object.create(Contact);
     newContact.firstName = inputtedFirstName; 
@@ -86,14 +87,17 @@ $(document).ready(function() {
       var newPhone = Object.create(Phone);
       newPhone.number = inputtedNumber;
 
-      var validatedNumber = newPhone.valid(inputtedNumber)
-      alert(validatedNumber);
+      var validatedNumber = newPhone.valid();
+      newPhone.validatedNumber = validatedNumber;
 
-      newContact.phones.push(newPhone);
+      if (newPhone.validatedNumber !== false){
+        newContact.phones.push(newPhone);
+      } else {
+        alert('Please enter a ten digit phone number.');
+      }
     });
-
-    $('ul#contacts').append('<li><span class="contact">' + newContact.fullName() + '</span></li>')
-
+        
+    $('ul#contacts').append('<li><span class="contact">' + newContact.fullName() + '</span></li>');
 
     $(".contact").last().click(function(){
       $("#show-contact").show();
@@ -114,22 +118,6 @@ $(document).ready(function() {
       });
 
     });
-
-    // $('#show-contact').click(function() {
-    //   $('#show-contact').hide();
-    //   $('.edit').show();
-    // })
-
-  // $('form#edit-new-contact').submit(function(event) {
-  //   event.preventDefault();
-
-  //   newContact.firstName = $('input#edit-new-first-name').val();
-  //   newContact.lastName = $('input#edit-new-last-name').val();
-  //   newContact.address = $('input#edit-new-address').val();
-
-  //   $('ul#contacts').append('<li><span class="contact">' + newContact.fullName() + '</span></li>')
-
-  // })
 
     this.reset();
   });
