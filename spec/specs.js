@@ -20,3 +20,26 @@ describe('Address', function() {
     });
   });
 });
+
+describe('Phone', function() {
+  describe('phoneFormat', function() {
+    it('returns a phone number in a standardized format', function(){
+      var testPhone = Object.create(Phone);
+      testPhone.number = '5035551234';
+      testPhone.phoneFormat().should.equal('(503)-555-1234');
+    });
+  });
+
+  describe('valid', function() {
+    it('returns numbers only if regular expression or letter are entered', function() {
+      var testPhone = Object.create(Phone);
+      testPhone.number = '(503)-444-!#5555';
+      testPhone.valid().should.equal("5034445555");
+    });
+    it('returns false if phone number input is not 10 digits long', function() {
+      var testPhone = Object.create(Phone);
+      testPhone.number = '12365859888';
+      testPhone.valid().should.equal(false);
+    });  
+  });
+});

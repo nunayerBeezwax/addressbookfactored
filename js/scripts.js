@@ -10,6 +10,21 @@ var Address = {
   }
 };
 
+var Phone = {
+  phoneFormat: function() {
+    return "(" + this.number.slice(0, 3) + ")-" + this.number.slice(3, 6) + "-" + this.number.slice(6,10);
+  },
+  valid: function() {
+    var numerizer = /\d/g;
+    var cleanNumber = this.number.match(numerizer).toString().replace(/,/g, '');
+
+    if (cleanNumber.length === 10) {
+      return cleanNumber;
+    } else {
+      return false;
+    }
+  }
+}
 $(document).ready(function() {
   $('#add-address').click(function() {
     $('#new-addresses').append('<div class="new-address">' +
@@ -28,6 +43,16 @@ $(document).ready(function() {
                             '</div>');
   });
 
+  $('#add-phone').click(function() {
+    $('#new-phones').append('<div class="new-phone">' +
+                            '<div class="form-group">' +
+                              '<label for="new-number">Phone Number</label>' +
+                              '<input type="text" class="form-control new-number">' +
+                            '</div>' +
+                            '</div>');
+  });
+
+
   $("form#new-contact").submit(function(event) {
     event.preventDefault();
 
@@ -39,6 +64,7 @@ $(document).ready(function() {
     newContact.lastName = inputtedLastName;
 
     newContact.addresses = [];
+    newContact.phones = [];
 
     $(".new-address").each(function() {
       var inputtedStreet = $(this).find('input.new-street').val();
@@ -54,6 +80,18 @@ $(document).ready(function() {
 
     });
 
+    $(".new-phone").each(function() {
+      var inputtedNumber = $(this).find('input.new-number').val();
+
+      var newPhone = Object.create(Phone);
+      newPhone.number = inputtedNumber;
+
+      var validatedNumber = newPhone.valid(inputtedNumber)
+      alert(validatedNumber);
+
+      newContact.phones.push(newPhone);
+    });
+
     $('ul#contacts').append('<li><span class="contact">' + newContact.fullName() + '</span></li>')
 
 
@@ -63,11 +101,18 @@ $(document).ready(function() {
       $("#show-contact h2").text(newContact.fullName());
       $(".first-name").text(newContact.firstName);
       $(".last-name").text(newContact.lastName);
-      
+
+      $('ul#phones').text('');
+      newContact.phones.forEach(function(phone) {
+        $('ul#phones').append('<li>' + phone.phoneFormat() + '</li>');
+      });
+
+
       $('ul#addresses').text('');
       newContact.addresses.forEach(function(address) {
         $('ul#addresses').append('<li>' + address.fullAddress() + '</li>');
       });
+
     });
 
     // $('#show-contact').click(function() {

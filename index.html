@@ -24,6 +24,15 @@
               <input type="text" class="form-control" id="new-last-name">
             </div>
             
+             <div id="new-phones">
+              <div class="new-phone">
+                <div class="form-group">
+                  <label for="new-number">Phone Number</label>
+                  <input type="text" class="form-control new-number">
+                </div>
+              </div>
+            </div>
+
             <div id="new-addresses">
               <div class="new-address">
                 <div class="form-group">
@@ -42,6 +51,7 @@
             </div>
 
             <span class="btn btn-primary" id="add-address">Another address</span>
+            <span class="btn btn-primary" id="add-phone">Another phone number</span>
 
             <button type="submit" class="btn">Add</button>
           </form>
@@ -57,10 +67,10 @@
 
             <p>First name: <span class="first-name"></span></p>
             <p>Last name: <span class="last-name"></span></p>
+            <p>Phone numbers:</p>
+            <ul id="phones"></ul> 
             <p>Addresses:</p>
-            <ul id="addresses">
-
-            </ul>  
+            <ul id="addresses"></ul>
           </div>
         </div> 
       </div>
