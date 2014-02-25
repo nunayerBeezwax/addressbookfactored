@@ -7,6 +7,9 @@ var Contact =  {
 var Address = {
   fullAddress: function() {
     return this.street + ", " + this.city + ", " + this.state;
+  },
+  valid: function() {
+    return (parseInt(this.street) > 0) && (this.city[0].toUpperCase() === this.city[0]);
   }
 };
 
@@ -76,9 +79,12 @@ $(document).ready(function() {
       newAddress.street = inputtedStreet;
       newAddress.city = inputtedCity;
       newAddress.state = inputtedState;
-
-      newContact.addresses.push(newAddress);
-
+      
+      if (newAddress.valid() !== false) {
+        newContact.addresses.push(newAddress);
+      } else {
+        alert('Please enter a valid address.');
+      }
     });
 
     $(".new-phone").each(function() {
