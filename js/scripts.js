@@ -1,19 +1,63 @@
 var Contact =  {
+  all: [],
+
+  initialize: function(firstName, lastName) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.addresses = []; 
+    this.phones = [];
+  },
   fullName: function() {
     return this.firstName + " " + this.lastName; 
+  },
+  create: function(firstName, lastName) {
+    var contact = Object.create(Contact);
+    contact.initialize(firstName, lastName);
+    Contact.all.push(contact);
+    return contact;
+  },
+  createAddress: function(street, city, state) {
+    var address = Object.create(Address);
+    Address.create(street, city, state);
+    this.addresses.push(address);
+    return address;
+  },
+  createPhones: function(number) {
+    var phone = Object.create(Phone);
+    Phone.create(number);
+    this.phones.push(phone);
+    return phone;
   }
 };
 
 var Address = {
+  initialize: function(street, city, state) {
+    this.street = street
+    this.city = city
+    this.state = state
+  },
+  create: function(street, city, state) {
+    var address = Object.create(Address);
+    address.initialize(street, city, state);
+    return address;
+  },
   fullAddress: function() {
     return this.street + ", " + this.city + ", " + this.state;
   },
   valid: function() {
     return (parseInt(this.street) > 0) && (this.city[0].toUpperCase() === this.city[0]);
-  }
+  },
 };
 
 var Phone = {
+  initialize: function(number) {
+    this.number = number;
+  },
+  create: function(number) {
+    var phone = Object.create(Phone);
+    phone.initialize(number);
+    return phone;
+  },
   phoneFormat: function() {
     return "(" + this.number.slice(0, 3) + ")-" + this.number.slice(3, 6) + "-" + this.number.slice(6,10);
   },
@@ -61,24 +105,16 @@ $(document).ready(function() {
 
     var inputtedFirstName = $('input#new-first-name').val();
     var inputtedLastName = $('input#new-last-name').val();
-    var isValidPhone = [];
 
-    var newContact = Object.create(Contact);
-    newContact.firstName = inputtedFirstName; 
-    newContact.lastName = inputtedLastName;
-
-    newContact.addresses = [];
-    newContact.phones = [];
+    var newContact = Contact.create(inputtedFirstName, inputtedLastName);
+    console.log(newContact)
 
     $(".new-address").each(function() {
       var inputtedStreet = $(this).find('input.new-street').val();
       var inputtedCity = $(this).find('input.new-city').val();
       var inputtedState = $(this).find('input.new-state').val();
     
-      var newAddress = Object.create(Address);
-      newAddress.street = inputtedStreet;
-      newAddress.city = inputtedCity;
-      newAddress.state = inputtedState;
+      var newAddress = Contact.createAddress(inputtedStreet, inputtedCity, inputtedState);
       
       if (newAddress.valid() !== false) {
         newContact.addresses.push(newAddress);
@@ -90,11 +126,10 @@ $(document).ready(function() {
     $(".new-phone").each(function() {
       var inputtedNumber = $(this).find('input.new-number').val();
 
-      var newPhone = Object.create(Phone);
-      newPhone.number = inputtedNumber;
-
       var validatedNumber = newPhone.valid();
-      newPhone.validatedNumber = validatedNumber;
+
+      var newPhone = Contact.createPhone(validatedNumber)
+
 
       if (newPhone.validatedNumber !== false){
         newContact.phones.push(newPhone);

@@ -1,3 +1,8 @@
+beforeEach(function() {
+  Contact.all = [];
+  Contact.addresses = [];
+});
+
 describe('Contact', function() {
   describe('fullName', function() {
     it('combines the first and last name, separated by a space', function() {
@@ -5,6 +10,52 @@ describe('Contact', function() {
       testContact.firstName = 'Dolly';
       testContact.lastName = 'Parton';
       testContact.fullName().should.equal('Dolly Parton');
+    });
+  });
+  describe("initialize", function() {
+    it('sets the first and last name', function() {
+      var testContact = Object.create(Contact);
+      testContact.initialize("Mary", "Jane");
+      testContact.firstName.should.equal("Mary");
+      testContact.lastName.should.equal("Jane");
+    });
+    it("sets up an empty array for the addresses property", function() {
+      var testContact = Object.create(Contact);
+      testContact.initialize("Mary", "Jane");
+      testContact.addresses.should.eql([]);
+    });
+  });
+  describe('create', function() {
+    it('creates a new instance of a Contact', function(){
+      var testContact = Contact.create();
+      Contact.isPrototypeOf(testContact).should.equal(true);
+    });
+    it("initializes the contact", function() {
+      var testContact = Contact.create("Mary", "Jane");
+      testContact.addresses.should.eql([]);
+    });
+    it("adds the contact to the .all property", function() {
+      var testContact = Contact.create();
+      Contact.all.should.eql([testContact]);
+    });
+  });
+  describe("createAddress", function() {
+    it("creates an address object",function() {
+      var testContact = Contact.create();
+      var testAddress = testContact.createAddress();
+      Address.isPrototypeOf(testAddress).should.equal(true);
+    });
+    it('adds the address to the addresses property of the contact', function() {
+      var testContact = Contact.create();
+      var testAddress = testContact.createAddress();
+      testContact.addresses.should.eql([testAddress]);
+    });
+  });
+  describe('createPhones', function() {
+    it('creates a phone number object', function() {
+      var testContact = Contact.create();
+      var testPhone = testContact.createPhones();
+      Phone.isPrototypeOf(testPhone).should.equal(true);
     });
   });
 });
@@ -18,7 +69,22 @@ describe('Address', function() {
       testAddress.state = "Oregon";
       testAddress.fullAddress().should.equal('123 4th Ave, Portland, Oregon');
     });
+  describe("initialize", function() {
+    it('sets the address', function() {
+      var testAddress = Object.create(Address);
+      testAddress.initialize('123 Main', 'Portland', 'OR');
+      testAddress.street.should.equal('123 Main');
+      testAddress.city.should.equal('Portland');
+      testAddress.state.should.equal('OR');
+    });
   });
+  describe("create", function() {
+    it("creates an address", function() {
+      var testAddress = Address.create(Address);
+      Address.isPrototypeOf(testAddress).should.equal(true);
+   });
+  });
+});
   describe('valid', function () {
     it('returns false if the street doesn\'t start with a number', function() {
       var testAddress = Object.create(Address);
